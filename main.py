@@ -6,54 +6,74 @@ from dfs import dfs
 from dijkstra import dijkstra
 from astar import astar
 
-from visualizer import draw_path
+from pygame_visualizer import animate_search
 
 
 start, goal = findStartGoal()
 
-# DFS
-t1 = time.perf_counter()
+while True:
 
-path, visited = dfs(start, goal)
+    print("\n====================")
+    print(" Maze Pathfinder ")
+    print("====================")
+    print("1. DFS")
+    print("2. Dijkstra")
+    print("3. A*")
+    print("0. Keluar")
+    print("note: jika ingin mengubah algoritma, klik silang di bagian animasi")
 
-t2 = time.perf_counter()
+    choice = input("\nPilih algoritma: ")
 
-print("DFS")
-print("Path Length:", len(path))
-print("Visited:", len(visited))
-print("Time:", (t2 - t1) * 1000)
+    if choice == "0":
 
-draw_path(path)
+        print("Program selesai.")
+        break
 
-print()
+    elif choice == "1":
 
-# Dijkstra
-t1 = time.perf_counter()
+        t1 = time.perf_counter()
 
-path, visited = dijkstra(start, goal)
+        path, visited = dfs(start, goal)
 
-t2 = time.perf_counter()
+        t2 = time.perf_counter()
 
-print("Dijkstra")
-print("Path Length:", len(path))
-print("Visited:", len(visited))
-print("Time:", (t2 - t1) * 1000)
+        print("\nDFS")
+        print("Path Length:", len(path))
+        print("Visited:", len(visited))
+        print("Time:", (t2 - t1) * 1000, "ms")
 
+        animate_search(path, visited)
 
-draw_path(path)
+    elif choice == "2":
 
-print()
+        t1 = time.perf_counter()
 
-# A*
-t1 = time.perf_counter()
+        path, visited = dijkstra(start, goal)
 
-path, visited = astar(start, goal)
+        t2 = time.perf_counter()
 
-t2 = time.perf_counter()
+        print("\nDijkstra")
+        print("Path Length:", len(path))
+        print("Visited:", len(visited))
+        print("Time:", (t2 - t1) * 1000, "ms")
 
-print("A*")
-print("Path Length:", len(path))
-print("Visited:", len(visited))
-print("Time:", (t2 - t1) * 1000)
+        animate_search(path, visited)
 
-draw_path(path)
+    elif choice == "3":
+
+        t1 = time.perf_counter()
+
+        path, visited = astar(start, goal)
+
+        t2 = time.perf_counter()
+
+        print("\nA*")
+        print("Path Length:", len(path))
+        print("Visited:", len(visited))
+        print("Time:", (t2 - t1) * 1000, "ms")
+
+        animate_search(path, visited)
+
+    else:
+
+        print("Pilihan tidak valid.")
