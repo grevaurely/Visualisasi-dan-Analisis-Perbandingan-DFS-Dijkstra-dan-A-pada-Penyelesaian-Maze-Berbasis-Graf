@@ -33,16 +33,17 @@ def astar(start,goal):
             ny = y + dy  
 
             if isMoveValid (nx, ny):
-                 new_g = g+1
-                 new_f = (new_g+heuristic((nx,ny), goal))         
+                new_g = g+1
+                new_f = (new_g+heuristic((nx,ny), goal)) 
+
                 heapq.heappush(
-                     pq,
-                     (
-                          new_f,
-                          new_g,
-                          (nx,ny),
-                          path + [(nx,ny)]
-                     )
+                    pq,
+                    (
+                        new_f,
+                        new_g,
+                        (nx,ny),
+                        path + [(nx,ny)]
+                    )
                 )
     return None, visited_order
 
