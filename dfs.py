@@ -32,4 +32,4 @@ def dfs(start, goal):
                 stack.append(((nx,ny), path+[(nx,ny)])
             )
                 
-        return None, visited_order
+    return None, visited_order

@@ -31,5 +31,5 @@ def dijkstra(start,goal):
             if isMoveValid (nx,ny):
 
                 heapq.heappush( pq, 
-                               (cost+1, (nx,ny), path +[(nx+ny)]))
+                               (cost+1, (nx,ny), path +[(nx,ny)]))
     return None, visited_order
