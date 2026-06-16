@@ -1,5 +1,5 @@
 import heapq
-from maze_algorithm import isMoveValid
+import maze_algorithm
 
 directions = [
     (-1,0), (1,0), (0,-1), (0,1)
@@ -28,7 +28,7 @@ def dijkstra(start,goal):
             nx = x + dx
             ny = y + dy
 
-            if isMoveValid (nx,ny):
+            if maze_algorithm.isMoveValid(nx,ny):
 
                 heapq.heappush( pq, 
                                (cost+1, (nx,ny), path +[(nx,ny)]))

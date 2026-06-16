@@ -1,28 +1,33 @@
 import pygame
-import time
-
-from maze_algorithm import maze
+import maze_algorithm
 
 CELL_SIZE = 35
 
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-GREEN = (0,255,0)
-RED = (255,0,0)
-BLUE = (0,100,255)
-YELLOW = (255,255,0)
-GRAY = (180,180,180)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 100, 255)
+YELLOW = (255, 255, 0)
+GRAY = (180, 180, 180)
 
 
-def animate_search(path, visited):
+def animate_search(
+    path,
+    visited,
+    algorithm_name,
+    execution_time
+):
 
     pygame.init()
 
-    rows = len(maze)
-    cols = len(maze[0])
+    font = pygame.font.SysFont("Arial", 20)
+
+    rows = len(maze_algorithm.maze)
+    cols = len(maze_algorithm.maze[0])
 
     width = cols * CELL_SIZE
-    height = rows * CELL_SIZE
+    height = rows * CELL_SIZE + 120
 
     screen = pygame.display.set_mode(
         (width, height)
@@ -32,9 +37,11 @@ def animate_search(path, visited):
         "Maze Pathfinding Visualization"
     )
 
-    running = True
-
     visited_set = set()
+
+    # ====================
+    # Animasi eksplorasi
+    # ====================
 
     for node in visited:
 
@@ -49,12 +56,21 @@ def animate_search(path, visited):
         draw_grid(
             screen,
             visited_set,
-            []
+            set(),
+            algorithm_name,
+            execution_time,
+            len(path),
+            len(visited),
+            font
         )
 
         pygame.display.update()
 
-        pygame.time.delay(120)
+        pygame.time.delay(80)
+
+    # ====================
+    # Animasi path akhir
+    # ====================
 
     path_set = set()
 
@@ -71,12 +87,23 @@ def animate_search(path, visited):
         draw_grid(
             screen,
             visited_set,
-            path_set
+            path_set,
+            algorithm_name,
+            execution_time,
+            len(path),
+            len(visited),
+            font
         )
 
         pygame.display.update()
 
-        pygame.time.delay(150)
+        pygame.time.delay(120)
+
+    # ====================
+    # Tetap tampil
+    # ====================
+
+    running = True
 
     while running:
 
@@ -90,12 +117,59 @@ def animate_search(path, visited):
     pygame.quit()
 
 
-def draw_grid(screen, visited_set, path_set):
+def draw_grid(
+    screen,
+    visited_set,
+    path_set,
+    algorithm_name,
+    execution_time,
+    path_length,
+    visited_count,
+    font
+):
 
     screen.fill(WHITE)
 
-    rows = len(maze)
-    cols = len(maze[0])
+    rows = len(maze_algorithm.maze)
+    cols = len(maze_algorithm.maze[0])
+
+    # ====================
+    # Statistik
+    # ====================
+
+    title = font.render(
+        f"Algorithm : {algorithm_name}",
+        True,
+        (0, 0, 0)
+    )
+
+
+    path_text = font.render(
+        f"Path Length : {path_length}",
+        True,
+        (0, 0, 0)
+    )
+
+    visited_text = font.render(
+        f"Visited : {visited_count}",
+        True,
+        (0, 0, 0)
+    )
+
+    maze_size_text = font.render(
+        f"Maze Size : {rows} x {cols}",
+        True,
+        (0, 0, 0)
+    )
+
+    screen.blit(title, (10, 10))
+    screen.blit(path_text, (10, 60))
+    screen.blit(visited_text, (10, 85))
+    screen.blit(maze_size_text, (250, 10))
+
+    # ====================
+    # Gambar maze
+    # ====================
 
     for row in range(rows):
 
@@ -103,28 +177,32 @@ def draw_grid(screen, visited_set, path_set):
 
             color = WHITE
 
-            if maze[row][col] == '#':
+            if maze_algorithm.maze[row][col] == '#':
                 color = BLACK
 
-            elif maze[row][col] == 'S':
+            elif maze_algorithm.maze[row][col] == 'S':
                 color = GREEN
 
-            elif maze[row][col] == 'G':
+            elif maze_algorithm.maze[row][col] == 'G':
                 color = RED
 
-            if (row, col) in visited_set:
+            if (
+                (row, col) in visited_set
+                and
+                maze_algorithm.maze[row][col] not in ['S', 'G']
+            ):
+                color = BLUE
 
-                if maze[row][col] not in ['S', 'G']:
-                    color = BLUE
-
-            if (row, col) in path_set:
-
-                if maze[row][col] not in ['S', 'G']:
-                    color = YELLOW
+            if (
+                (row, col) in path_set
+                and
+                maze_algorithm.maze[row][col] not in ['S', 'G']
+            ):
+                color = YELLOW
 
             rect = pygame.Rect(
                 col * CELL_SIZE,
-                row * CELL_SIZE,
+                row * CELL_SIZE + 120,
                 CELL_SIZE,
                 CELL_SIZE
             )

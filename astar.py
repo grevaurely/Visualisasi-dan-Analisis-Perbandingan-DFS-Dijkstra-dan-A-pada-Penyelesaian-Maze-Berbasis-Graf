@@ -1,5 +1,5 @@
 import heapq
-from maze_algorithm import isMoveValid
+import maze_algorithm
 
 directions = [
     (-1,0), (1,0), (0,-1), (0,1)
@@ -9,10 +9,12 @@ def heuristic(a,b):
     return abs(a[0]-b[0]) + abs(a[1]-b[1]) #manhattan distance
 
 def astar(start,goal):
-    pq = [(0,0, start, [start])]
+    start_h = heuristic(start,goal)
+    pq = [(start_h, 0, start, [start])]
 
     visited = set()
     visited_order = []
+    g_score = { start:0}
 
     while pq:
         f,g,current, path = heapq.heappop(pq) #g : biaya yg sudah ditempuh,h : perkiraan jarak ke goal, f: rumus A* -> f = g+h, yg dipilih oleh a star adalah f terkecil
@@ -32,9 +34,17 @@ def astar(start,goal):
             nx = x + dx
             ny = y + dy  
 
-            if isMoveValid (nx, ny):
+            if maze_algorithm.isMoveValid (nx, ny):
                 new_g = g+1
-                new_f = (new_g+heuristic((nx,ny), goal)) 
+                if((nx,ny) not in g_score or new_g<g_score[(nx,ny)]):
+                    g_score[(nx, ny)] = new_g
+                    new_f = (
+                         new_g
+                            +
+                         heuristic((nx, ny), goal)
+                        )
+
+                
 
                 heapq.heappush(
                     pq,
