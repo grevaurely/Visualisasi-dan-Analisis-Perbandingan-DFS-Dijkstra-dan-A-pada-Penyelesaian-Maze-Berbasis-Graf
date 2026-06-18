@@ -7,9 +7,53 @@ from dijkstra import dijkstra
 from astar import astar
 
 from pygame_visualizer import animate_search
-
+from mazeGenerator import generate_maze
+import maze_algorithm
 
 start, goal = findStartGoal()
+
+
+
+while True:
+
+    print("\n===== PILIH UKURAN MAZE =====")
+    print("1. 10 x 10")
+    print("2. 20 x 20")
+    print("3. 30 x 30")
+
+    size_choice = input("Pilihan: ")
+
+    if size_choice == "1":
+        rows = 10
+        cols = 10
+        break
+
+    elif size_choice == "2":
+        rows = 20
+        cols = 20
+        break
+
+    elif size_choice == "3":
+        rows = 30
+        cols = 30
+        break
+
+    else:
+        print("Pilihan tidak valid")
+
+while True:
+
+    generated = generate_maze(rows, cols)
+
+    maze_algorithm.set_maze(generated)
+
+    start, goal = maze_algorithm.findStartGoal()
+
+    path, _ = dijkstra(start, goal)
+
+    if path is not None:
+        break
+    print("Maze berhasil dibuat")
 
 while True:
 
@@ -20,7 +64,6 @@ while True:
     print("2. Dijkstra")
     print("3. A*")
     print("0. Keluar")
-    print("note: jika ingin mengubah algoritma, klik silang di bagian animasi")
 
     choice = input("\nPilih algoritma: ")
 
@@ -42,7 +85,12 @@ while True:
         print("Visited:", len(visited))
         print("Time:", (t2 - t1) * 1000, "ms")
 
-        animate_search(path, visited)
+        animate_search(
+            path,
+            visited,
+            "DFS",
+            (t2 - t1) * 1000
+        )
 
     elif choice == "2":
 
@@ -57,7 +105,12 @@ while True:
         print("Visited:", len(visited))
         print("Time:", (t2 - t1) * 1000, "ms")
 
-        animate_search(path, visited)
+        animate_search(
+            path,
+            visited,
+            "Dijkstra",
+            (t2 - t1) * 1000
+        )
 
     elif choice == "3":
 
@@ -72,7 +125,12 @@ while True:
         print("Visited:", len(visited))
         print("Time:", (t2 - t1) * 1000, "ms")
 
-        animate_search(path, visited)
+        animate_search(
+            path,
+            visited,
+            "A*",
+            (t2 - t1) * 1000
+        )
 
     else:
 
