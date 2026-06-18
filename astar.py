@@ -10,14 +10,14 @@ def heuristic(a,b):
 
 def astar(start,goal):
     start_h = heuristic(start,goal)
-    pq = [(start_h, 0, start, [start])]
+    pq = [(start_h, start_h, 0, start, [start])]
 
     visited = set()
     visited_order = []
     g_score = { start:0}
 
     while pq:
-        f,g,current, path = heapq.heappop(pq) #g : biaya yg sudah ditempuh,h : perkiraan jarak ke goal, f: rumus A* -> f = g+h, yg dipilih oleh a star adalah f terkecil
+        f,h,g,current, path = heapq.heappop(pq) #g : biaya yg sudah ditempuh,h : perkiraan jarak ke goal, f: rumus A* -> f = g+h, yg dipilih oleh a star adalah f terkecil
 
         if current in visited:
                 continue
@@ -38,11 +38,8 @@ def astar(start,goal):
                 new_g = g+1
                 if((nx,ny) not in g_score or new_g<g_score[(nx,ny)]):
                     g_score[(nx, ny)] = new_g
-                    new_f = (
-                         new_g
-                            +
-                         heuristic((nx, ny), goal)
-                        )
+                    new_h = heuristic((nx, ny), goal)
+                    new_f = new_g + new_h 
 
                 
 
@@ -50,6 +47,7 @@ def astar(start,goal):
                         pq,
                         (
                             new_f,
+                            new_h,
                             new_g,
                             (nx,ny),
                             path + [(nx,ny)]
