@@ -46,15 +46,15 @@ def astar(start,goal):
 
                 
 
-                heapq.heappush(
-                    pq,
-                    (
-                        new_f,
-                        new_g,
-                        (nx,ny),
-                        path + [(nx,ny)]
+                    heapq.heappush(
+                        pq,
+                        (
+                            new_f,
+                            new_g,
+                            (nx,ny),
+                            path + [(nx,ny)]
+                        )
                     )
-                )
     return None, visited_order
 
 
